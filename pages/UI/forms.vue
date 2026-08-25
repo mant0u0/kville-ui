@@ -73,6 +73,20 @@ const contactOptions = [
     </ShowcaseSection>
 
     <ShowcaseSection
+      title="說明提示"
+      component-name="UIFormHoverText"
+      description="游標移入或鍵盤聚焦觸發內容時，顯示半透明黑色的說明文字；沒有子元素時預設顯示圓圈問號。"
+      usage='<UIFormHoverText text="顯示說明的文字">說明</UIFormHoverText>'
+    >
+      <div
+        class="text-brand-700 flex flex-wrap items-center gap-6 py-3 text-sm"
+      >
+        <UIFormHoverText text="顯示說明的文字">說明</UIFormHoverText>
+        <UIFormHoverText text="沒有子元素時，會顯示預設的圓圈問號。" />
+      </div>
+    </ShowcaseSection>
+
+    <ShowcaseSection
       title="輸入框"
       component-name="UIFormInput"
       description="獨立負責 v-model 與原生輸入狀態；以 status 管理 default、error、warning，並可用 size 調整高度。"
