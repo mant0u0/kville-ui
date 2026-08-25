@@ -1,5 +1,32 @@
 # 專案開發與文件同步規範 (Agent Guidelines)
 
+## 專案概要
+
+- 這是 Nuxt 3 與 Vue 3 的 TypeScript 元件展示工作區，主要程式碼位於根目錄下的 `components/`、`composables/` 與 `pages/`，沒有 `src/` 目錄。
+- `components/UI/` 放可重用 UI 元件；`components/Showcase/` 放展示頁的共用外框；`pages/UI/` 是各元件分類的互動展示頁。
+- Tailwind CSS v4 透過 `@tailwindcss/vite` 整合，樣式入口是 `assets/styles/main.css`；元件圖示使用 `@lucide/vue`。
+- 優先沿用現有元件 API、`<script setup lang="ts">`、Nuxt auto-import 與 Tailwind class 寫法，避免引入平行抽象或重複元件。
+
+## 常用命令
+
+先執行 `npm install` 安裝依賴。可用命令如下：
+
+| 目的       | 命令                   |
+| ---------- | ---------------------- |
+| 開發伺服器 | `npm run dev`          |
+| 格式檢查   | `npm run format:check` |
+| 自動格式化 | `npm run format`       |
+| 生產建置   | `npm run build`        |
+| 靜態產生   | `npm run generate`     |
+| 預覽建置   | `npm run preview`      |
+
+目前 `package.json` 沒有獨立的 lint 或 test script；完成修改後至少執行受影響範圍可用的格式檢查，並在元件、路由或設定變更時執行 `npm run build`。
+
+## 專案文件
+
+- 根本開發流程與 Nuxt 指令參見 [README.md](README.md)。
+- 元件文件集中於 `docs/`，例如 [docs/UI/Form/HoverText.md](docs/UI/Form/HoverText.md)。先讀取受影響模組的文件，再以目前程式碼核對內容。
+
 ## 文件優先檢查
 
 每次 AI 接收到與專案程式碼、元件、功能、API、設定或除錯相關的請求時，開始處理前都必須先檢查 `docs/` 是否已有對應文件。
@@ -15,10 +42,13 @@
 
 ## 鏡像目錄映射規則 (Path Mapping)
 
-文件集中於 `docs/`，結構與 `src/` 1:1 鏡像對齊：
+文件集中於 `docs/`，結構與目前根目錄的程式碼路徑 1:1 鏡像對齊：
 
-- 檔案對應：`src/{path}/{filename}.(ts|tsx|js|vue)` ➜ `docs/{path}/{filename}.md`
-- 模組對應：`src/features/{feature}/...` ➜ `docs/features/{feature}/index.md`
+- 元件對應：`components/{path}/{filename}.vue` ➜ `docs/{path}/{filename}.md`
+- Composable 對應：`composables/{filename}.ts` ➜ `docs/composables/{filename}.md`
+- 頁面對應：`pages/{path}/{filename}.vue` ➜ `docs/pages/{path}/{filename}.md`
+- 模組對應：若目錄包含多個互相協作的檔案，使用對應目錄下的 `index.md`。
+- 若修改的是 `app.vue`、`nuxt.config.ts` 或其他根目錄設定，使用 `docs/` 下語意相符的文件；找不到時才建立最小必要文件。
 
 ## 編輯準則
 

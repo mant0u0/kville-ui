@@ -41,7 +41,7 @@ const controlStatus = computed<FormControlStatus>(() =>
 <template>
   <textarea
     v-model="model"
-    class="block min-h-26 leading-[1.6]"
+    class="block min-h-26 py-2 leading-[1.6]"
     :class="useFormControlStyles(size, controlStatus)"
     :placeholder="placeholder"
     :rows="rows"
