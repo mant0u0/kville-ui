@@ -11,10 +11,10 @@ const filterExpanded = ref(true)
       description="這是一個清單表格範例頁。"
       class="mb-4"
     >
-      <template #actions>
+      <UIFormButtonGroup :sm="0" :md="2">
         <UIFormButton text="新增" icon="Plus" variant="warning" />
         <UIFormButton text="匯入" icon="Import" variant="secondary" />
-      </template>
+      </UIFormButtonGroup>
     </UIPageHeader>
 
     <UIPageContent class="flex flex-col">

@@ -129,15 +129,15 @@ const demoDropdown: NavMenuConfig = {
     <ShowcaseSection
       title="按鈕群組溢出"
       component-name="UIFormButtonGroup"
-      description="將多個 UIFormButton 放入容器；可用 gap 調整間距，寬度不足時，後續按鈕會自動收進垂直三點選單，並保留按鈕圖示。"
-      usage='<UIFormButtonGroup :gap="12">
+      description="以 sm、md、lg、xl 指定各螢幕尺寸可見的按鈕數量；其餘按鈕會收進垂直三點選單，並保留按鈕圖示。"
+      usage='<UIFormButtonGroup :sm="1" :md="2" :lg="4" :xl="6" :gap="12">
   <UIFormButton text="編輯" icon="Pencil" />
   <UIFormButton text="複製" icon="Copy" variant="secondary" />
   <UIFormButton text="刪除" icon="Trash-2" variant="danger" />
 </UIFormButtonGroup>'
     >
       <div class="max-w-[800px]">
-        <UIFormButtonGroup :gap="12">
+        <UIFormButtonGroup :sm="1" :md="2" :lg="4" :xl="6" :gap="12">
           <UIFormButton text="編輯" icon="Pencil" />
           <UIFormButton text="複製" icon="Copy" variant="secondary" />
           <UIFormButton text="匯出" icon="Download" variant="outline" />

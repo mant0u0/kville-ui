@@ -19,13 +19,9 @@ defineProps<{
 
         <div
           v-if="$slots.actions || $slots.default"
-          class="flex min-w-0 shrink-0 justify-end max-md:w-1/2 md:w-max"
+          class="flex min-w-0 shrink-0 justify-end gap-2 max-md:w-1/2 md:w-max"
         >
-          <UIFormButtonGroup>
-            <slot name="actions">
-              <slot />
-            </slot>
-          </UIFormButtonGroup>
+          <slot />
         </div>
       </div>
 
