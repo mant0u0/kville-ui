@@ -4,7 +4,6 @@ import { ChevronRight } from '@lucide/vue'
 
 defineProps<{
   title: string
-  subtitle: string
   description: string
   icon: Component
   to: string
@@ -13,19 +12,18 @@ defineProps<{
 
 <template>
   <NuxtLink
-    class="border-nurse-200 text-brand-900 hover:border-brand-300 grid min-h-15 grid-cols-[auto_1fr_auto] items-start gap-4 rounded-[18px] border bg-white p-4 no-underline transition-[transform,border-color] duration-[160ms]"
+    class="border-nurse-200 text-brand-900 hover:border-brand-300 grid min-h-15 grid-cols-[auto_1fr_auto] items-start gap-4 rounded-[18px] border bg-white p-3 no-underline transition-[transform,border-color] duration-[160ms]"
     :to="to"
   >
     <span
-      class="bg-brand-50 text-brand-600 grid size-12 place-items-center rounded-[14px]"
+      class="bg-brand-50 text-brand-600 grid size-12 place-items-center rounded-lg"
     >
       <component :is="icon" :size="24" aria-hidden="true" />
     </span>
 
-    <span class="grid gap-1">
+    <span class="grid">
       <strong class="text-lg">{{ title }}</strong>
-      <small class="text-brand-500 font-bold">{{ subtitle }}</small>
-      <span class="text-brand-600 text-[13px]">{{ description }}</span>
+      <span class="text-nurse-600 text-[13px]">{{ description }}</span>
     </span>
 
     <ChevronRight

@@ -39,10 +39,10 @@ const controlStatus = computed<FormControlStatus>(() =>
 </script>
 
 <template>
-  <span class="relative block">
+  <span class="form-select relative block">
     <select
       v-model="model"
-      class="appearance-none pr-9.5"
+      class="appearance-none pr-9.5 font-normal"
       :class="useFormControlStyles(size, controlStatus)"
       :required="required"
       :disabled="disabled"

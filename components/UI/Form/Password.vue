@@ -40,7 +40,7 @@ const controlStatus = computed<FormControlStatus>(() =>
   <div class="relative">
     <input
       v-model="model"
-      :class="[useFormControlStyles(size, controlStatus), 'pr-11']"
+      :class="[useFormControlStyles(size, controlStatus, true), 'pr-11']"
       :type="isVisible ? 'text' : 'password'"
       :placeholder="placeholder"
       :required="required"

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Search } from '@lucide/vue'
+import { Plus, Search } from '@lucide/vue'
 
 const name = ref('王小明')
 const email = ref('')
@@ -8,10 +8,14 @@ const readonlyValue = ref('系統自動帶入')
 const note = ref('')
 const location = ref('taipei')
 const warningLocation = ref('')
-const manualContact = ref('email')
+const serviceCategories = ref(['cut', 'color', 'perm'])
+const expandedServiceCategories = ref(['cut', 'color', 'perm', 'care'])
+const staffSkills = ref<string[]>([])
+const customServices = ref<string[]>([])
+const footerServices = ref(['cut'])
+const manualContact = ref('other')
 const contactMethod = ref('email')
 const symbolRadio = ref('enabled')
-const lookupCode = ref('')
 const selectedDate = ref('2026-08-12')
 const selectedTime = ref('14:00')
 const participantCount = ref(2)
@@ -19,12 +23,51 @@ const intensity = ref(40)
 const agreed = ref(true)
 const newsletter = ref(false)
 const symbolCheckbox = ref(true)
+const mergeKeyword = ref('王小明')
 
 const locationOptions = [
   { label: '台北門市', value: 'taipei' },
   { label: '台中門市', value: 'taichung' },
   { label: '高雄門市（暫停服務）', value: 'kaohsiung', disabled: true },
 ]
+
+const serviceOptions = [
+  { label: '剪髮服務', value: 'cut', description: '洗髮、剪髮與基礎造型' },
+  { label: '染髮服務', value: 'color', description: '單色染、補染與髮根處理' },
+  { label: '燙髮服務', value: 'perm', description: '冷燙、溫塑與局部燙髮' },
+  { label: '護髮療程', value: 'care', description: '依髮況安排修護流程' },
+  {
+    label: '頭皮養護',
+    value: 'scalp',
+    disabled: true,
+    description: '目前暫停預約',
+  },
+]
+
+const simpleServiceOptions = [
+  { label: '剪髮服務', value: 'cut' },
+  { label: '染髮服務', value: 'color' },
+  { label: '燙髮服務', value: 'perm' },
+  { label: '護髮療程', value: 'care' },
+]
+
+const footerServiceOptions = ref([...simpleServiceOptions])
+
+function addFooterService() {
+  const option = { label: '新服務項目', value: 'new-service' }
+
+  if (!footerServiceOptions.value.some((item) => item.value === option.value)) {
+    footerServiceOptions.value = [...footerServiceOptions.value, option]
+  }
+  if (!footerServices.value.includes(option.value)) {
+    footerServices.value = [...footerServices.value, option.value]
+  }
+}
+
+function addFooterServiceAndClose(close: () => void) {
+  addFooterService()
+  close()
+}
 
 const contactOptions = [
   { label: 'Email', value: 'email' },
@@ -69,20 +112,6 @@ const contactOptions = [
             ><p class="slot-example">slot-after</p></template
           >
         </UIFormGroup>
-      </div>
-    </ShowcaseSection>
-
-    <ShowcaseSection
-      title="說明提示"
-      component-name="UIFormHoverText"
-      description="游標移入或鍵盤聚焦觸發內容時，顯示半透明黑色的說明文字；沒有子元素時預設顯示圓圈問號。"
-      usage='<UIFormHoverText text="顯示說明的文字">說明</UIFormHoverText>'
-    >
-      <div
-        class="text-brand-700 flex flex-wrap items-center gap-6 py-3 text-sm"
-      >
-        <UIFormHoverText text="顯示說明的文字">說明</UIFormHoverText>
-        <UIFormHoverText text="沒有子元素時，會顯示預設的圓圈問號。" />
       </div>
     </ShowcaseSection>
 
@@ -133,7 +162,7 @@ const contactOptions = [
             required
           />
         </UIFormGroup>
-        <UIFormGroup label="密碼錯誤">
+        <UIFormGroup label="密碼錯誤" warning>
           <UIFormPassword model-value="wrong-password" warning />
         </UIFormGroup>
         <UIFormGroup label="停用密碼欄位">
@@ -165,18 +194,15 @@ const contactOptions = [
       usage='<UIFormTextarea v-model="note" :rows="4" warning />'
     >
       <div class="form-grid form-grid--three">
-        <div class="field-demo">
-          <span>Default</span
-          ><UIFormTextarea v-model="note" placeholder="請輸入特殊需求" />
-        </div>
-        <div class="field-demo">
-          <span>Warning</span
-          ><UIFormTextarea model-value="內容格式有誤" warning />
-        </div>
-        <div class="field-demo">
-          <span>Disabled</span
-          ><UIFormTextarea model-value="不可編輯的內容" disabled />
-        </div>
+        <UIFormGroup label="Default">
+          <UIFormTextarea v-model="note" placeholder="請輸入特殊需求" />
+        </UIFormGroup>
+        <UIFormGroup label="Warning" warning>
+          <UIFormTextarea model-value="內容格式有誤" warning />
+        </UIFormGroup>
+        <UIFormGroup label="Disabled">
+          <UIFormTextarea model-value="不可編輯的內容" disabled />
+        </UIFormGroup>
       </div>
     </ShowcaseSection>
 
@@ -213,8 +239,8 @@ const contactOptions = [
     <ShowcaseSection
       title="單選選項"
       component-name="UIFormRadio + UIFormRadioGroup"
-      description="可手動組合單一 Radio，或用 options 產生 RadioGroup；純符號模式必須提供 aria-label。"
-      usage='<UIFormRadio v-model="method" name="contact" value="email" label="Email" />\n<UIFormRadio v-model="enabled" name="enabled" value="yes" aria-label="啟用" />\n<UIFormRadioGroup v-model="method" :options="contactOptions" />'
+      description="可手動組合單一 Radio，或用 options 產生 RadioGroup；bordered 可建立與輸入框一致的整塊點擊區域。純符號模式必須提供 aria-label。"
+      usage='<UIFormRadio v-model="method" name="contact" value="email" label="Email" />\n<UIFormRadio v-model="enabled" name="enabled" value="yes" aria-label="啟用" />\n<UIFormRadio bordered label="Email" />\n<UIFormRadioGroup v-model="method" :options="contactOptions" />'
     >
       <div class="option-demo-grid">
         <UIFormGroup label="手動組合">
@@ -251,14 +277,130 @@ const contactOptions = [
             aria-label="啟用功能"
           />
         </UIFormGroup>
+        <UIFormGroup label="外框 Radio">
+          <div class="flex items-center gap-2">
+            <UIFormRadio
+              v-model="manualContact"
+              name="bordered-radio"
+              value="other"
+              label="其他"
+              bordered
+            />
+            <UIFormInput placeholder="其他" />
+          </div>
+        </UIFormGroup>
+      </div>
+    </ShowcaseSection>
+
+    <ShowcaseSection
+      title="多選下拉選單"
+      component-name="UIFormMultiSelect"
+      description="自訂多選下拉選單，預設完整顯示已選項目並將選單掛到 body，避免受到外容器裁切；支援搜尋、標籤摘要、直接輸入、底部操作、停用與警告狀態。"
+      usage='<UIFormMultiSelect
+  v-model="services"
+  :options="serviceOptions"
+  placeholder="選擇服務項目"
+  searchable
+  clearable
+/>
+
+<!-- 使用摘要模式時，指定要顯示的標籤數量 -->
+<UIFormMultiSelect
+  v-model="services"
+  :options="simpleServiceOptions"
+  :max-tag-count="2"
+  :searchable="false"
+/>
+
+<!-- 在欄位內輸入文字；allow-custom-value 可建立新項目 -->
+<UIFormMultiSelect
+  v-model="services"
+  :options="simpleServiceOptions"
+  editable
+  allow-custom-value
+/>
+
+<!-- 下拉選單最下方的 footer slot -->
+<UIFormMultiSelect v-model="services" :options="simpleServiceOptions">
+  <template #footer="{ close }">
+    <button type="button" @click="close">新增服務項目</button>
+  </template>
+</UIFormMultiSelect>
+
+/>'
+    >
+      <UIFormGroup label="Default（完整顯示）" class="mb-4">
+        <UIFormMultiSelect
+          v-model="expandedServiceCategories"
+          :options="simpleServiceOptions"
+          placeholder="選擇服務項目"
+          :searchable="false"
+        />
+      </UIFormGroup>
+
+      <div class="form-grid form-grid--three">
+        <UIFormGroup label="最多顯示 2 個標籤">
+          <UIFormMultiSelect
+            v-model="serviceCategories"
+            :options="serviceOptions"
+            placeholder="選擇服務項目"
+            :max-tag-count="2"
+          />
+        </UIFormGroup>
+        <UIFormGroup label="Warning" warning>
+          <UIFormMultiSelect
+            v-model="staffSkills"
+            :options="serviceOptions"
+            placeholder="至少選擇一項專長"
+            warning
+            :clearable="false"
+          />
+        </UIFormGroup>
+        <UIFormGroup label="Disabled">
+          <UIFormMultiSelect
+            :model-value="['cut', 'care']"
+            :options="serviceOptions"
+            disabled
+          />
+        </UIFormGroup>
+      </div>
+
+      <div class="form-grid">
+        <UIFormGroup label="可直接輸入文字">
+          <UIFormMultiSelect
+            v-model="customServices"
+            :options="simpleServiceOptions"
+            placeholder="輸入或選擇服務項目"
+            editable
+            allow-custom-value
+          />
+        </UIFormGroup>
+        <UIFormGroup label="下拉選單底部按鈕">
+          <UIFormMultiSelect
+            v-model="footerServices"
+            :options="footerServiceOptions"
+            placeholder="選擇服務項目"
+          >
+            <template #footer="{ close }">
+              <button
+                class="text-brand-700 hover:bg-brand-50 flex h-9 w-full items-center justify-center gap-1.5 rounded-md text-sm font-bold transition-colors"
+                type="button"
+                @click="addFooterServiceAndClose(close)"
+              >
+                <Plus :size="16" :stroke-width="2.5" aria-hidden="true" />
+                新增服務項目
+              </button>
+            </template>
+          </UIFormMultiSelect>
+        </UIFormGroup>
       </div>
     </ShowcaseSection>
 
     <ShowcaseSection
       title="多選選項"
       component-name="UIFormCheckbox"
-      description="可獨立組合多個核取項目；不需要文字時省略 label／slot，並提供 aria-label。"
-      usage='<UIFormCheckbox v-model="agreed" label="我同意服務條款" />\n<UIFormCheckbox v-model="enabled" aria-label="啟用通知" />'
+      description="可獨立組合多個核取項目；bordered 可建立與輸入框一致的整塊點擊區域。不需要文字時省略 label／slot，並提供 aria-label。"
+      usage='<UIFormCheckbox v-model="agreed" label="我同意服務條款" />\n<UIFormCheckbox v-model="enabled" aria-label="啟用通知" />\n<UIFormCheckbox bordered label="接收通知" />'
     >
       <div class="check-list">
         <UIFormCheckbox v-model="agreed" label="我同意服務條款" />
@@ -270,38 +412,127 @@ const contactOptions = [
           <span>純 Checkbox 符號</span>
           <UIFormCheckbox v-model="symbolCheckbox" aria-label="啟用通知" />
         </div>
+        <UIFormCheckbox v-model="newsletter" label="外框 Checkbox" bordered />
+      </div>
+    </ShowcaseSection>
+
+    <ShowcaseSection
+      title="合併表單欄位"
+      component-name="UIFormMerge"
+      description="以單一外框合併多個支援欄位，欄位間以左側分隔線區隔；任一項目取得焦點時，整個容器會顯示焦點狀態。"
+      usage='<UIFormMerge>
+  <UIFormDate v-model="date" />
+  <UIFormTime v-model="time" />
+  <UIFormNumber v-model="count" />
+</UIFormMerge>'
+    >
+      <div class="grid gap-5">
+        <UIFormGroup label="輸入框、下拉選單與按鈕">
+          <UIFormMerge>
+            <UIFormInput v-model="mergeKeyword" placeholder="搜尋姓名" />
+            <UIFormSelect v-model="location" :options="locationOptions" />
+            <UIFormButton
+              ><Search :size="17" aria-hidden="true" />查詢</UIFormButton
+            >
+          </UIFormMerge>
+        </UIFormGroup>
+
+        <UIFormGroup label="輸入框 附帶單位">
+          <UIFormMerge>
+            <span class="unit">單位</span>
+            <UIFormInput placeholder="請輸入數值" />
+            <span class="unit">單位</span>
+          </UIFormMerge>
+        </UIFormGroup>
+
+        <UIFormGroup label="日期、時間與數值">
+          <UIFormMerge>
+            <UIFormDate v-model="selectedDate" />
+            <UIFormTime v-model="selectedTime" :step="1800" />
+            <UIFormNumber v-model="participantCount" :min="1" :max="10" />
+          </UIFormMerge>
+        </UIFormGroup>
+
+        <UIFormGroup label="有框選項">
+          <UIFormMerge>
+            <UIFormRadio
+              v-model="manualContact"
+              name="merge-contact"
+              value="email"
+              label="Email"
+              bordered
+            />
+            <UIFormRadio
+              v-model="manualContact"
+              name="merge-contact"
+              value="phone"
+              label="電話"
+              bordered
+            />
+            <UIFormCheckbox v-model="agreed" label="同意條款" bordered />
+          </UIFormMerge>
+        </UIFormGroup>
+
+        <UIFormGroup label="多選下拉選單">
+          <UIFormMerge>
+            <UIFormMultiSelect
+              v-model="serviceCategories"
+              :options="serviceOptions"
+              placeholder="選擇服務項目"
+              :max-tag-count="2"
+            />
+            <UIFormButton variant="secondary">套用</UIFormButton>
+          </UIFormMerge>
+        </UIFormGroup>
       </div>
     </ShowcaseSection>
 
     <ShowcaseSection
       title="輸入框旁按鈕"
       component-name="UIFormButton"
-      description="固定為 44px 高，展示 primary、secondary、outline、warning 與 disabled 狀態。"
-      usage='<UIFormButton variant="outline">外框按鈕</UIFormButton>\n<UIFormButton warning>警告操作</UIFormButton>'
+      description="以 variant 選擇語意色彩，以 appearance 切換實心或外框樣式；預設為 primary 實心按鈕。"
+      usage='<UIFormButton variant="primary">主要操作</UIFormButton>
+<UIFormButton variant="danger" appearance="outline">刪除資料</UIFormButton>'
     >
-      <div class="button-state-grid">
-        <div class="field-demo">
-          <span>Primary</span><UIFormButton>主要按鈕</UIFormButton>
-        </div>
-        <div class="field-demo">
-          <span>Secondary</span
-          ><UIFormButton variant="secondary">次要按鈕</UIFormButton>
-        </div>
-        <div class="field-demo">
-          <span>Outline</span
-          ><UIFormButton variant="outline">外框按鈕</UIFormButton>
-        </div>
-        <div class="field-demo">
-          <span>Warning</span><UIFormButton warning>警告操作</UIFormButton>
-        </div>
-        <div class="field-demo">
-          <span>Disabled</span><UIFormButton disabled>停用按鈕</UIFormButton>
-        </div>
-      </div>
-      <div class="form-grid">
-        <UIFormGroup label="查詢代碼">
+      <div class="grid gap-6">
+        <UIFormGroup label="實心按鈕">
+          <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <UIFormButton variant="primary">Primary</UIFormButton>
+            <UIFormButton variant="secondary">Secondary</UIFormButton>
+            <UIFormButton variant="warning">Warning</UIFormButton>
+            <UIFormButton variant="danger">Danger</UIFormButton>
+          </div>
+        </UIFormGroup>
+
+        <UIFormGroup label="外框按鈕">
+          <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <UIFormButton variant="primary" appearance="outline"
+              >Primary</UIFormButton
+            >
+            <UIFormButton variant="secondary" appearance="outline"
+              >Secondary</UIFormButton
+            >
+            <UIFormButton variant="warning" appearance="outline"
+              >Warning</UIFormButton
+            >
+            <UIFormButton variant="danger" appearance="outline"
+              >Danger</UIFormButton
+            >
+          </div>
+        </UIFormGroup>
+
+        <UIFormGroup label="Disabled">
+          <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <UIFormButton variant="primary" disabled>Primary</UIFormButton>
+            <UIFormButton variant="secondary" disabled>Secondary</UIFormButton>
+            <UIFormButton variant="warning" disabled>Warning</UIFormButton>
+            <UIFormButton variant="danger" disabled>Danger</UIFormButton>
+          </div>
+        </UIFormGroup>
+
+        <UIFormGroup label="範例：搜尋">
           <div class="inline-field">
-            <UIFormInput v-model="lookupCode" placeholder="輸入查詢代碼" />
+            <UIFormInput placeholder="輸入查詢代碼" />
             <UIFormButton
               ><Search :size="17" aria-hidden="true" />查詢</UIFormButton
             >

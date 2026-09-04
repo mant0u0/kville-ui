@@ -51,7 +51,7 @@ const iconComponents: Record<AlertIcon, Component> = {
 
 const iconClasses: Record<AlertIcon, string> = {
   success: 'bg-brand-300/20 text-brand-600',
-  error: 'bg-rose-300/20 text-rose-600',
+  error: 'bg-danger-300/20 text-danger-600',
   warning: 'bg-amber-300/20 text-amber-600',
   info: 'bg-sky-300/20 text-sky-600',
   question: 'bg-violet-300/20 text-violet-600',
@@ -59,7 +59,7 @@ const iconClasses: Record<AlertIcon, string> = {
 
 const progressClasses: Record<AlertIcon, string> = {
   success: 'bg-brand-400',
-  error: 'bg-rose-400',
+  error: 'bg-danger-400',
   warning: 'bg-amber-400',
   info: 'bg-sky-400',
   question: 'bg-violet-400',
@@ -165,7 +165,7 @@ onBeforeUnmount(clearCloseTimer)
         >
         <UIFormButton
           v-if="showConfirmButton"
-          :warning="icon === 'error'"
+          :variant="icon === 'error' ? 'danger' : 'primary'"
           @click="confirm"
           >{{ confirmText }}</UIFormButton
         >

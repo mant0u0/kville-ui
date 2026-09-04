@@ -41,7 +41,7 @@ const controlStatus = computed<FormControlStatus>(() =>
 <template>
   <input
     v-model.number="model"
-    :class="useFormControlStyles(size, controlStatus)"
+    :class="useFormControlStyles(size, controlStatus, true)"
     type="number"
     :min="min"
     :max="max"

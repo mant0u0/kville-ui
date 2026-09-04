@@ -35,7 +35,7 @@ onBeforeUnmount(() => {
 <template>
   <div class="relative">
     <input
-      class="form-control border-nurse-200 text-brand-700 read-only:bg-nurse-50 disabled:bg-nurse-100 disabled:text-nurse-500 h-11 w-full rounded-lg border bg-white p-3 pr-11 text-base outline-none read-only:cursor-default disabled:cursor-not-allowed"
+      class="form-control border-nurse-200 text-brand-900 read-only:bg-nurse-50 disabled:bg-nurse-100 disabled:text-nurse-500 h-11 w-full rounded-lg border bg-white p-3 pr-11 text-base outline-none read-only:cursor-default disabled:cursor-not-allowed"
       :value="text"
       :disabled="disabled"
       :aria-label="text || '可複製文字'"

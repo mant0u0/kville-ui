@@ -10,6 +10,7 @@ const props = withDefaults(
     boxClass?: string
     warning?: boolean
     warningText?: string
+    row?: boolean
   }>(),
   {
     label: '',
@@ -19,6 +20,7 @@ const props = withDefaults(
     boxClass: '',
     warning: false,
     warningText: '',
+    row: false,
   },
 )
 
@@ -27,15 +29,18 @@ const hasWarning = computed(() => props.warning || props.warningText !== '')
 
 <template>
   <div
-    class="form-group flex flex-col gap-1.5"
-    :class="[{ 'form-group--warning': hasWarning }, groupClass]"
+    class="form-group flex flex-col gap-1"
+    :class="[
+      { 'form-group--warning': hasWarning, 'form-group--row': row },
+      groupClass,
+    ]"
   >
     <slot name="slot-before" />
 
     <div v-if="label" class="form-text form-group__label">
       <p
-        class="m-0 flex min-h-5 items-center gap-1 text-base font-bold"
-        :class="hasWarning ? 'text-rose-600' : ''"
+        class="m-0 flex min-h-5 items-center gap-1 text-sm font-bold"
+        :class="hasWarning ? 'text-rose-700' : ''"
       >
         {{ label === 'default' ? '\u00A0' : label }}
         <span v-if="star" class="text-rose-500" aria-hidden="true">*</span>
@@ -51,7 +56,7 @@ const hasWarning = computed(() => props.warning || props.warningText !== '')
 
     <div v-if="warningText" class="form-text form-group__warning">
       <p
-        class="m-0 flex items-center gap-[5px] text-[13px] leading-normal text-rose-600"
+        class="m-0 flex items-center gap-1.25 text-[13px] leading-normal text-rose-700"
       >
         <CircleAlert :size="15" :stroke-width="2.5" aria-hidden="true" />
         {{ warningText }}
@@ -66,6 +71,13 @@ const hasWarning = computed(() => props.warning || props.warningText !== '')
 .form-group {
   &--warning :deep(.form-control) {
     border-color: var(--color-rose-500);
+    color: var(--color-rose-700);
+
+    input,
+    select,
+    textarea {
+      color: var(--color-rose-700);
+    }
 
     &:focus {
       box-shadow: 0 0 0 2px var(--color-rose-50);
@@ -74,7 +86,7 @@ const hasWarning = computed(() => props.warning || props.warningText !== '')
 
   &--warning :deep(.form-radio:not(.form-radio--disabled)),
   &--warning :deep(.form-checkbox:not(.form-checkbox--disabled)) {
-    color: var(--color-rose-600);
+    color: var(--color-rose-700);
   }
 
   &--warning :deep(.form-radio__control),
@@ -100,6 +112,21 @@ const hasWarning = computed(() => props.warning || props.warningText !== '')
     color: var(--color-brand-600);
     font-size: 12px;
     font-weight: 400;
+  }
+
+  &--row {
+    flex-direction: row;
+    align-items: center;
+
+    .form-group__label {
+      flex: 0 0 auto;
+      margin-right: 0.5rem;
+      padding-left: 0.5rem;
+    }
+
+    .form-box {
+      flex: 1 1 auto;
+    }
   }
 }
 

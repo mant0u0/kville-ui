@@ -42,7 +42,7 @@ const controlStatus = computed<FormControlStatus>(() =>
   <textarea
     v-model="model"
     class="block min-h-26 py-2 leading-[1.6]"
-    :class="useFormControlStyles(size, controlStatus)"
+    :class="useFormControlStyles(size, controlStatus, true)"
     :placeholder="placeholder"
     :rows="rows"
     :maxlength="maxlength"

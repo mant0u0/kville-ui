@@ -36,14 +36,16 @@ import { CalendarDays, Clock3, UserRound } from '@lucide/vue'
     <ShowcaseSection
       title="狀態文字標籤"
       component-name="UITextStatusTag"
-      description="統一顯示進行中、已完成與未啟用狀態，可切換 sm／md 尺寸。"
-      usage='<UITextStatusTag status="active" />'
+      description="統一顯示狀態文字，可依 status 自動套用顏色，也能用 color 覆寫為 primary、secondary、warning 或 danger。"
+      usage='<UITextStatusTag status="inactive" color="warning" />'
     >
       <div class="flex flex-wrap items-center gap-3">
         <UITextStatusTag status="active" />
         <UITextStatusTag status="complete" />
         <UITextStatusTag status="inactive" />
         <UITextStatusTag status="active" size="md" />
+        <UITextStatusTag status="active" color="warning" />
+        <UITextStatusTag status="active" color="danger" />
       </div>
     </ShowcaseSection>
 
@@ -58,6 +60,38 @@ import { CalendarDays, Clock3, UserRound } from '@lucide/vue'
         <UITextIconItem :icon="Clock3" text="11:30・60 分鐘" />
         <UITextIconItem :icon="UserRound" text="王設計師" />
       </div>
+    </ShowcaseSection>
+
+    <ShowcaseSection
+      title="Lucide 圖示"
+      component-name="UIIcon"
+      description="只要傳入 Lucide 的圖示名稱即可使用，頁面不需要自行引入圖示元件。"
+      usage='<UIIcon name="Search" />
+<UIIcon name="CalendarDays" :size="20" />
+<UIFormButton icon="Download" text="下載" />'
+    >
+      <div class="text-brand-600 flex flex-wrap items-center gap-5">
+        <div class="flex items-center gap-2 text-sm">
+          <UIIcon name="Search" :size="20" />
+          Search
+        </div>
+        <div class="flex items-center gap-2 text-sm">
+          <UIIcon name="CalendarDays" :size="20" />
+          CalendarDays
+        </div>
+        <div class="flex items-center gap-2 text-sm">
+          <UIIcon name="Download" :size="20" />
+          Download
+        </div>
+      </div>
+      <a
+        class="text-brand-600 hover:text-brand-800 mt-5 inline-flex text-sm font-bold underline underline-offset-4"
+        href="https://lucide.dev/icons/"
+        target="_blank"
+        rel="noreferrer"
+      >
+        查詢 Lucide 圖示名稱
+      </a>
     </ShowcaseSection>
 
     <ShowcaseSection

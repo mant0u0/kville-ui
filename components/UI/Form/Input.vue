@@ -37,7 +37,7 @@ const controlStatus = computed<FormControlStatus>(() =>
 <template>
   <input
     v-model="model"
-    :class="useFormControlStyles(size, controlStatus)"
+    :class="useFormControlStyles(size, controlStatus, true)"
     :type="type"
     :placeholder="placeholder"
     :required="required"

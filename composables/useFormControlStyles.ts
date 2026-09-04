@@ -4,7 +4,10 @@ export type FormControlStatus = 'default' | 'error' | 'warning'
 export type FormControlSize = 'sm' | 'md' | 'lg'
 
 const baseClasses =
-  'form-control w-full rounded-lg border bg-white text-brand-700 outline-none placeholder:text-nurse-300 disabled:cursor-not-allowed disabled:bg-nurse-100 disabled:text-nurse-500 read-only:cursor-not-allowed read-only:bg-nurse-100 read-only:text-nurse-500'
+  'form-control w-full rounded-lg border bg-white text-brand-900 outline-none placeholder:text-nurse-300 disabled:cursor-not-allowed disabled:bg-nurse-100 disabled:text-nurse-500'
+
+const readonlyClasses =
+  'read-only:cursor-default read-only:bg-nurse-50 read-only:text-nurse-500'
 
 const sizeClasses: Record<FormControlSize, string> = {
   sm: 'h-9 px-2.5 text-sm',
@@ -24,6 +27,12 @@ const statusClasses: Record<FormControlStatus, string> = {
 export function useFormControlStyles(
   size: FormControlSize = 'md',
   status: FormControlStatus = 'default',
+  supportsReadonly = false,
 ) {
-  return [baseClasses, sizeClasses[size], statusClasses[status]]
+  return [
+    baseClasses,
+    supportsReadonly ? readonlyClasses : '',
+    sizeClasses[size],
+    statusClasses[status],
+  ]
 }

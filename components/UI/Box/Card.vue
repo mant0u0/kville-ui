@@ -6,9 +6,7 @@ defineProps<{
 </script>
 
 <template>
-  <section
-    class="border-nurse-200 overflow-hidden rounded-[20px] border bg-white"
-  >
+  <section class="border-nurse-200 overflow-hidden rounded-2xl border bg-white">
     <header class="border-nurse-200 border-b p-5">
       <h2 class="text-brand-900 m-0 text-xl leading-[1.45] font-bold">
         {{ title }}

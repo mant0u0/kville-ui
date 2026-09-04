@@ -1,4 +1,8 @@
 <script setup lang="ts">
+const simplePage = ref(1)
+const currentPage = ref(1)
+const pageSize = ref(10)
+
 const rows = [
   {
     id: 'CMP-001',
@@ -118,6 +122,56 @@ const usage = `<UITable :hide-vertical-borders="false">
           </tbody>
         </table>
       </UITable>
+    </ShowcaseSection>
+
+    <ShowcaseSection
+      title="表格換頁"
+      component-name="UITablePaginationInfo + UITablePagination"
+      description="使用 v-model 控制目前頁碼，可依需求選擇簡易或進階的換頁控制。"
+      usage='<UITablePaginationInfo
+  v-model="pageSize"
+  :current-page="currentPage"
+  :total-pages="12"
+  :total-items="123"
+  :page-size-options="[10, 20, 50, 100]"
+/>
+
+<UITablePagination v-model="simplePage" :total-pages="6" />
+<UITablePagination v-model="currentPage" :total-pages="12" show-page-jump :page-jump-size="5" />'
+    >
+      <div class="grid gap-6">
+        <UITablePaginationInfo
+          v-model="pageSize"
+          :current-page="currentPage"
+          :total-pages="12"
+          :total-items="123"
+        />
+
+        <div class="grid gap-3">
+          <strong class="text-brand-700 text-sm">簡易版</strong>
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <UITablePagination v-model="simplePage" :total-pages="6" />
+            <span class="text-brand-600 text-sm font-bold"
+              >目前第 {{ simplePage }} 頁</span
+            >
+          </div>
+        </div>
+
+        <div class="grid gap-3">
+          <strong class="text-brand-700 text-sm">進階版</strong>
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <UITablePagination
+              v-model="currentPage"
+              :total-pages="12"
+              show-page-jump
+              :page-jump-size="5"
+            />
+            <span class="text-brand-600 text-sm font-bold"
+              >目前第 {{ currentPage }} 頁</span
+            >
+          </div>
+        </div>
+      </div>
     </ShowcaseSection>
   </ShowcasePage>
 </template>

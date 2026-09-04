@@ -23,7 +23,7 @@ withDefaults(
   width: 100%;
   overflow-x: auto;
   border: 1px solid var(--color-nurse-200);
-  border-radius: 16px;
+  border-radius: 8px;
   background: white;
 }
 
@@ -37,7 +37,7 @@ withDefaults(
 }
 
 .ui-table :deep(caption) {
-  padding: 14px 16px;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--color-nurse-200);
   color: var(--color-brand-700);
   font-weight: 700;
@@ -46,7 +46,7 @@ withDefaults(
 
 .ui-table :deep(th),
 .ui-table :deep(td) {
-  padding: 12px 16px;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--color-nurse-200);
   text-align: left;
   vertical-align: middle;

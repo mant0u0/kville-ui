@@ -117,7 +117,9 @@ onBeforeUnmount(() => {
     >
       <div class="flex flex-wrap justify-center gap-3 py-5">
         <UIFormButton @click="openAlert('success')">Success</UIFormButton>
-        <UIFormButton warning @click="openAlert('error')">Error</UIFormButton>
+        <UIFormButton variant="danger" @click="openAlert('error')"
+          >Error</UIFormButton
+        >
         <UIFormButton variant="outline" @click="openAlert('warning')"
           >Warning</UIFormButton
         >
@@ -146,7 +148,7 @@ onBeforeUnmount(() => {
       usage="try { await request() } catch (error) { alert.text = error instanceof Error ? error.message : '未知錯誤' }"
     >
       <div class="flex flex-col items-center gap-3 py-5 text-center">
-        <UIFormButton warning @click="runBrokenRequest"
+        <UIFormButton variant="danger" @click="runBrokenRequest"
           >執行錯誤程式碼</UIFormButton
         >
         <p class="text-brand-600 m-0 text-sm">

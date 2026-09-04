@@ -40,7 +40,7 @@ const controlStatus = computed<FormControlStatus>(() =>
   <input
     v-model="model"
     class="scheme-light"
-    :class="useFormControlStyles(size, controlStatus)"
+    :class="useFormControlStyles(size, controlStatus, true)"
     type="time"
     :min="min"
     :max="max"

@@ -1,30 +1,63 @@
 <script setup lang="ts">
-import { ReceiptText } from '@lucide/vue'
+import { Menu, PanelLeftClose, PanelLeftOpen } from '@lucide/vue'
+import type { NavMenuConfig } from '~/components/UI/Button/NavMenu.vue'
+import { UserRound } from '@lucide/vue'
 
-const { homeItem, uiWorkspace } = useAppNavigation()
+const isCollapsed = useState('sidebar-collapsed', () => false)
+const isMobileMenuOpen = useState('sidebar-mobile-menu', () => false)
+
+const lastAction = ref('尚未操作')
+const setAction = (message: string) => {
+  lastAction.value = message
+}
+const demoDropdown: NavMenuConfig = {
+  items: [
+    { text: '編輯資料', onClick: () => setAction('點擊：編輯資料') },
+    { text: '查看紀錄', onClick: () => setAction('點擊：查看紀錄') },
+    {
+      text: '登出',
+      onClick: async () => {
+        await navigateTo('/login')
+      },
+      isRed: true,
+    },
+  ],
+}
 </script>
 
 <template>
   <header
-    class="border-brand-600 bg-brand-500 sticky top-0 z-20 flex min-h-15.75 items-center justify-between border-b px-5 text-lg font-bold text-white max-sm:px-3"
+    class="border-brand-800 bg-brand-600 sticky top-0 z-20 flex min-h-12 items-center justify-between border-b px-3 py-2 text-lg font-bold text-white max-sm:px-3"
   >
-    <NuxtLink
-      class="flex items-center gap-1 text-inherit no-underline"
-      :to="homeItem.to"
-      aria-label="返回首頁"
-    >
-      <ReceiptText class="text-white" :size="34" :stroke-width="1.5" />
-      <strong class="px-2 leading-[1.4] max-sm:px-0 max-sm:text-base">
-        UI 元件</strong
+    <div class="flex min-w-0 items-center gap-2">
+      <button
+        class="flex size-9 h-11 w-11 shrink-0 items-center justify-center rounded-lg border-0 bg-transparent text-white hover:bg-white/16 max-lg:hidden"
+        type="button"
+        :aria-label="isCollapsed ? '展開側邊選單' : '收合側邊選單'"
+        :title="isCollapsed ? '展開側邊選單' : '收合側邊選單'"
+        @click="isCollapsed = !isCollapsed"
       >
-    </NuxtLink>
+        <PanelLeftOpen v-if="isCollapsed" :size="19" aria-hidden="true" />
+        <PanelLeftClose v-else :size="19" aria-hidden="true" />
+      </button>
+      <button
+        class="flex size-9 shrink-0 items-center justify-center rounded-lg border-0 bg-transparent text-white hover:bg-white/16 lg:hidden"
+        type="button"
+        aria-label="開啟側邊選單"
+        title="開啟側邊選單"
+        @click="isMobileMenuOpen = true"
+      >
+        <Menu :size="22" aria-hidden="true" />
+      </button>
+      <UIPageLogo />
+    </div>
     <nav aria-label="主要導覽">
-      <NuxtLink
-        class="rounded-full px-3 py-1.75 text-[13px] text-white no-underline hover:bg-white/16 max-sm:px-2 max-sm:text-xs"
-        active-class="bg-white/16"
-        :to="uiWorkspace.to"
-        >{{ uiWorkspace.title }}</NuxtLink
-      >
+      <UIButtonNavMenu
+        text="王小明"
+        :icon="UserRound"
+        has-dropdown
+        :dropdown="demoDropdown"
+      />
     </nav>
   </header>
 </template>
